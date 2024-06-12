@@ -16,7 +16,7 @@ export const moveStageHandler = (userId, payload) => {
     currentStages.sort((a, b) => a.id - b.id);
     const currentStage = currentStages[currentStages.length - 1];
 
-    console.log(payload);
+    console.log("-----------", payload);
 
     //클라이언트 vs 서버 비교
     if(currentStage.id !== payload.currentStage){
@@ -29,9 +29,9 @@ export const moveStageHandler = (userId, payload) => {
 
       // 1스테이지 -> 2스테이지로 넘어가는 가정
       // 5 -> 임의로 정한 오차범위
-      if (elapsedTime< 10 || elapsedTime > 10.5) {
-        return {status: 'fail', message: "Invalid elapsed time"};
-      }
+      // if (elapsedTime< 10 || elapsedTime > 10.5) {
+      //   return {status: 'fail', message: "Invalid elapsed time"};
+      // }
   
 
     // targetStage 대한 검증 <- 게임에셋에 존재하는지?
@@ -42,10 +42,8 @@ export const moveStageHandler = (userId, payload) => {
         return {status: 'fail', message: 'Target stage not found'};
     }
 
-    if(nextstage.score)
 
-
-    console.log("now stage : ", currentStages, "next stage : ", nextstage);
+    console.log("stage Change!!!");
     //스테이지 설정
     setStage(userId, payload.targetStage, serverTime);
 

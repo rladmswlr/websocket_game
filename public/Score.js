@@ -1,8 +1,11 @@
 import { sendEvent } from "./Socket.js";
+import stages from './assets/stage.json' with { type: 'json' };
 
 class Score {
   score = 0;
   HIGH_SCORE_KEY = 'highScore';
+  nowstageId = 1000;
+  nowstage = 0;
   stageChange = true;
 
   constructor(ctx, scaleRatio) {
@@ -13,15 +16,19 @@ class Score {
 
   update(deltaTime) {
     this.score += deltaTime * 0.001;
-    // 점수가 100점 이상이 될 시 서버에 메세지 전송
-    if (Math.floor(this.score) === 10 && this.stageChange) {
+
+    let scoreUp = stages.data[this.nowstage + 1].score;
+    // 점수가 해당하는 점수 이상일 시
+    if (scoreUp <= this.score && this.stageChange) {
       this.stageChange = false;
-      sendEvent(11, { currentStage: 1000, targetStage: 1001 });
+      sendEvent(11, { currentStage: stages.data[this.nowstage].id, targetStage: stages.data[this.nowstage + 1].id });
+      this.nowstage++;
+      console.log("successful change map");
+      this.stageChange = true;
     }
   }
 
   getItem(itemId) {
-    console.log("nowItem",itemId);
     switch(itemId)
     {
       case 1:
@@ -50,6 +57,7 @@ class Score {
 
   reset() {
     this.score = 0;
+    this.nowstage = 0;
   }
 
   setHighScore() {
