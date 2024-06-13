@@ -1,16 +1,17 @@
 import { getGameAssets } from "../init/assets.js";
-import { clearItem } from "../models/item.model.js";
+import { clearItem, unlockItem } from "../models/item.model.js";
 import { clearStage, getStage, setStage } from "../models/stage.model.js";
 
 export const gameStart = (uuid, payload) => {
 
-    const {stages} = getGameAssets();
+    const {stages, itemUnlocks} = getGameAssets();
 
     //스테이지를 초기화 해준다.
     clearStage(uuid);
     clearItem(uuid);
     //stages 배열에서 0번째 = 첫번째 스테이지
     setStage(uuid, stages.data[0].id, payload.timestamp);
+    unlockItem(uuid, itemUnlocks.data[0].item_id, stages.data[0].id ,payload.timestamp);
     console.log('Stage: ', getStage(uuid));
 
     return { status : 'success'};

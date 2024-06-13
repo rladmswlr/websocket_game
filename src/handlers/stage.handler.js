@@ -2,6 +2,7 @@
 // 유저는 일정 점수가 되면 다음 스테이지로 이동한다.
 
 import { getGameAssets } from "../init/assets.js";
+import { unlockItem } from "../models/item.model.js";
 import { getStage, setStage } from "../models/stage.model.js";
 
 export const moveStageHandler = (userId, payload) => {
@@ -32,8 +33,12 @@ export const moveStageHandler = (userId, payload) => {
   
 
     // targetStage 대한 검증 <- 게임에셋에 존재하는지?
-    const {stages} = getGameAssets();
+    const {stages, itemUnlocks} = getGameAssets();
     let nextstage = stages.data.find((stage) => stage.id === currentStage.id + 1);
+
+    let unlockstage =  itemUnlocks.data.find((item) => item.stage_id === currentStage.id + 1)
+
+    unlockItem(userId, unlockstage.item_id, unlockstage.stage_id ,serverTime);
 
     if(!stages.data.some((stage) => stage.id === nextstage.id)) {
         return {status: 'fail', message: 'Target stage not found'};

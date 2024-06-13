@@ -17,8 +17,12 @@ export const eatItem = (uuid, id, timestamp) => {
     return items[uuid].push({id, timestamp});
 };
 
-export const unlockItem = (uuid, id, timestamp) => {
-    return unlockItems[uuid].push({id, timestamp});
+export const getUnlockItem = (uuid) => {
+    return unlockItems[uuid];
+};
+
+export const unlockItem = (uuid, itemid,stage_id, timestamp) => {
+    return unlockItems[uuid].push({itemid, stage_id, timestamp});
 };
 
 

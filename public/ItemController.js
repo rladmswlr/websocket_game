@@ -36,12 +36,12 @@ class ItemController {
     createItem(nowStage) {
         let unlockItem = itemunlock.data.find((stage) => stage.stage_id === nowStage);
 
-        const index = this.getRandomNumber(0, unlockItem.item_id.length - 1);
+        const index = this.getRandomNumber(0, unlockItem.item_id - 1);
         const itemInfo = this.itemImages[index];
         const x = this.canvas.width * 1.5;
         const y = this.getRandomNumber(
             10,
-            this.canvas.height
+            this.canvas.height - itemInfo.height
         );
 
         const item = new Item(
