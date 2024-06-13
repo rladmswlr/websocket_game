@@ -103,9 +103,9 @@ function createSprites() {
     };
   });
 
-  itemController = new ItemController(ctx, itemImages, scaleRatio, GROUND_SPEED);
-
   score = new Score(ctx, scaleRatio);
+
+  itemController = new ItemController(ctx, itemImages, scaleRatio, GROUND_SPEED);
 }
 
 function getScaleRatio() {
@@ -203,7 +203,10 @@ function gameLoop(currentTime) {
     ground.update(gameSpeed, deltaTime);
     // 선인장
     cactiController.update(gameSpeed, deltaTime);
-    itemController.update(gameSpeed, deltaTime);
+
+    const nowStage = score.getStage();
+    itemController.update(gameSpeed, deltaTime, nowStage);
+
     // 달리기
     player.update(gameSpeed, deltaTime);
     updateGameSpeed(deltaTime);

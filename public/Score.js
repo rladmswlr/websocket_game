@@ -1,5 +1,6 @@
 import { sendEvent } from "./Socket.js";
 import stages from './assets/stage.json' with { type: 'json' };
+import items from './assets/item.json' with { type: 'json' };
 
 class Score {
   score = 0;
@@ -7,6 +8,7 @@ class Score {
   nowstageId = 1000;
   nowstage = 0;
   stageChange = true;
+  nowscorepersecond = 1;
 
   constructor(ctx, scaleRatio) {
     this.ctx = ctx;
@@ -15,44 +17,24 @@ class Score {
   }
 
   update(deltaTime) {
-    this.score += deltaTime * 0.001;
+    this.nowscorepersecond = stages.data[this.nowstage].scorepersecond;;
+    this.score += deltaTime * 0.003 * this.nowscorepersecond;
 
     let scoreUp = stages.data[this.nowstage + 1].score;
     // 점수가 해당하는 점수 이상일 시
     if (scoreUp <= this.score && this.stageChange) {
       this.stageChange = false;
-      sendEvent(11, { currentStage: stages.data[this.nowstage].id, targetStage: stages.data[this.nowstage + 1].id });
+      sendEvent(11, { currentStage: stages.data[this.nowstage].id, targetStage: stages.data[this.nowstage + 1].id, score: this.score});
       this.nowstage++;
-      console.log("successful change map");
       this.stageChange = true;
     }
   }
 
-  getItem(itemId) {
-    switch(itemId)
-    {
-      case 1:
-        this.score += 10;
-        break;
-      case 2:
-        this.score += 20;
-        break;
-      case 3:
-        this.score += 30;
-        break;
-      case 4:
-        this.score += 40;
-        break;
-      case 5:
-        this.score += 50;
-        break;
-      case 6:
-        this.score += 60;
-        break;
-      default:
-        this.score += 0;
-        break;
-    }
+  getItem(getitemId) {
+    const nowItem = items.data.find((itemId) => itemId.id === getitemId);
+    this.score += nowItem.score;
+
+    sendEvent(7, {score: nowItem.score , itemId : getitemId, nowStage: stages.data[this.nowstage].id});
   }
 
   reset() {
@@ -65,6 +47,10 @@ class Score {
     if (this.score > highScore) {
       localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
     }
+  }
+
+  getStage() {
+    return stages.data[this.nowstage].id;
   }
 
   getScore() {

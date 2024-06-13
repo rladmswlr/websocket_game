@@ -1,8 +1,9 @@
 import Item from "./Item.js";
+import itemunlock from './assets/item_unlock.json' with { type: 'json' };
 
 class ItemController {
 
-    INTERVAL_MIN = 0;
+    INTERVAL_MIN = 5000;
     INTERVAL_MAX = 12000;
 
     nextInterval = null;
@@ -30,13 +31,17 @@ class ItemController {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    createItem() {
-        const index = this.getRandomNumber(0, this.itemImages.length - 1);
+
+    //아이템을 생성하는 부분
+    createItem(nowStage) {
+        let unlockItem = itemunlock.data.find((stage) => stage.stage_id === nowStage);
+
+        const index = this.getRandomNumber(0, unlockItem.item_id.length - 1);
         const itemInfo = this.itemImages[index];
         const x = this.canvas.width * 1.5;
         const y = this.getRandomNumber(
             10,
-            this.canvas.height - itemInfo.height
+            this.canvas.height
         );
 
         const item = new Item(
@@ -53,9 +58,9 @@ class ItemController {
     }
 
 
-    update(gameSpeed, deltaTime) {
+    update(gameSpeed, deltaTime, nowStage) {
         if(this.nextInterval <= 0) {
-            this.createItem();
+            this.createItem(nowStage);
             this.setNextItemTime();
         }
 
