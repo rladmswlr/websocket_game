@@ -7,14 +7,9 @@ import handlerMappings from "./handlerMapping.js";
 
 export const handleDisconnect = (socket, uuid) => {
     removeUser(socket.id);
-    console.log(`User disconnects: ${socket.id}`);
-    console.log(`Current users : `, getUser());
 }
 
 export const handleConnection = (socket, uuid) => {
-    console.log(`New user connected!: ${uuid} with socket ID ${socket.id}`);
-    console.log(`Current users: `, getUser());
-
     createStage(uuid);
     createItem(uuid);
 
