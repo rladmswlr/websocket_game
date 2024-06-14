@@ -24,13 +24,6 @@ export const moveStageHandler = (userId, payload) => {
 
     // 점수 검증
     const serverTime = Date.now();  // 현재 타임스탬프
-    const elapsedTime = (serverTime - currentStage.timestamp) / 1000;
-
-      //5 -> 임의로 정한 오차범위
-    //   if (payload.score < 10 || elapsedTime > 10.5) {
-    //     return {status: 'fail', message: "Invalid elapsed time"};
-    //   }
-  
 
     // targetStage 대한 검증 <- 게임에셋에 존재하는지?
     const {stages, itemUnlocks} = getGameAssets();
